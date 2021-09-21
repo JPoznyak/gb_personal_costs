@@ -71,7 +71,10 @@ export default {
           value: 500
         },
       ];
-    }
+    },
+    onChangePage(p){
+      this.curPage = p
+    },
   },
 
   created(){
