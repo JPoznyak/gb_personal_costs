@@ -39,12 +39,20 @@ export default {
         }
     },
     computed: {
+        // getCurrentDate() {
+        //     const today = new Date()
+        //     const d = today.getDate()
+        //     const m = today.getMonth() + 1
+        //     const y = today.getFullYear()
+        //     return `${d}.${m}.${y}`
+        // }
+
         getCurrentDate() {
-            const today = new Date()
-            const d = today.getDate()
-            const m = today.getMonth() + 1
-            const y = today.getFullYear()
-            return `${d}.${m}.${y}`
+            return new Intl.DateTimeFormat("ru-RU", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            }).format(new Date());
         }
     }
 };
