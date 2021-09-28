@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.wrp]">
+  <div :class="[$style.pagination]">
     <div @click="onClick(cur - 1)">-</div>
     <div
       v-for="i in amount" :key="i"
@@ -36,9 +36,9 @@ export default {
 </script>
 
 <style module lang="scss">
-.wrp {
+.pagination {
   display: flex;
-  margin-top: 20px;
+  margin: 20px;
   & > div {
     padding: 10px;
     &.active {

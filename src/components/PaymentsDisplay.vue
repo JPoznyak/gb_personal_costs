@@ -1,8 +1,23 @@
 <template>
   <div class="payments-list">
-     <div class="items" v-for="(item, idx) in list" :key="idx">
-         {{item.id }} {{ item }}
-     </div>
+     <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, idx) in list" :key="idx">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.amount }}</td>
+            </tr>
+        </tbody>
+      </table>
   </div>
 </template>
 
@@ -14,16 +29,12 @@ export default {
             type: Array,
             default: ()=>[]
         }
-    },
-    data(){
-        return {
-        }
     }
 }
 </script>
 
-<style lang="scss" module>
-items {
-  padding-right: 20px;
+<style>
+th, td {
+  padding-right: 60px;
 }
 </style>

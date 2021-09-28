@@ -1,77 +1,101 @@
 <template>
-<div>
+  <div>
     <div>
-        <button class="newPayment" @click='show = !show'> Add new cost </button>    
+      <button class="newPayment" @click="show = !show">Add new cost +</button>
     </div>
     <div v-if="show">
       <input class="form" v-model="date" placeholder="Payment date" />
-      <input class="form" v-model.trim="category" placeholder="Payment category"/>
-      <input class="form" v-model.number="value" type="number" placeholder="Payment Amount"/>
-      <button class="addBtn" @click="onClick"> 
-        Add Data
-      </button>
+      <input class="form" v-model.number="amount" type="number" placeholder="Payment Amount" />
+      <!-- <input class="form" v-model.trim="category" placeholder="Payment category" /> -->
+      <select class="select" v-model="category" v-if="options">
+        <option value disabled selected hidden>Select Category</option>
+        <option v-for="option in options" :value="option" :key="option">{{ option }}</option>
+      </select>
+      <add-category class="addBtn"/>
+      <button class="addBtn" @click="onClick" :disabled="!category">Add Data</button>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
-export default {
-    name: "AddPayment",
-    data(){
-        return {
-            show: false,
-            date: "",
-            category: "",
-            value: ""
-        }
-    },
-    methods: {
-        onClick(){
-            const { category, value } = this
-            const data = {
-                date: this.date || this.getCurrentDate,
-                category,
-                value
-            }
-            console.log('add', data)
-            //Вызов события, название события и аргументы
-            this.$emit('addNewPayment', data)
-        }
-    },
-    computed: {
-        // getCurrentDate() {
-        //     const today = new Date()
-        //     const d = today.getDate()
-        //     const m = today.getMonth() + 1
-        //     const y = today.getFullYear()
-        //     return `${d}.${m}.${y}`
-        // }
+import { mapActions } from "vuex"
+import addCategory from "./AddCategory.vue"
 
-        getCurrentDate() {
-            return new Intl.DateTimeFormat("ru-RU", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-            }).format(new Date());
-        }
+export default {
+  name: "AddPayment",
+  components: {
+    addCategory
+  },
+  data() {
+    return {
+      show: false,
+      date: "",
+      category: "",
+      amount: ""
+    };
+  },
+
+  methods: {
+    ...mapActions([
+        'fetchCategoryList'
+    ]),
+
+    onClick() {
+      const { category, amount } = this;
+      const data = {
+        date: this.date || this.getCurrentDate,
+        category,
+        amount
+      };
+      //Вызов события, название события и аргументы
+      this.$emit("addNewPayment", data);
     }
+  },
+
+  computed: {
+    // getCurrentDate() {
+    //     const today = new Date()
+    //     const d = today.getDate()
+    //     const m = today.getMonth() + 1
+    //     const y = today.getFullYear()
+    //     return `${d}.${m}.${y}`
+    // }
+
+    getCurrentDate() {
+      return new Intl.DateTimeFormat("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      }).format(new Date());
+    },
+    options() {
+      return this.$store.getters.getCategoriesList;
+    }
+  },
+
+  created() {
+    this.fetchCategoryList()
+  }
 };
 </script>
 
 <style lang="scss" scoped>
     .newPayment {
-        margin-bottom: 10px;
-        margin-top: 20px;
+        width: 130px;
+        // margin-bottom: 10px;
+        // margin-top: 10px;
         background-color: cadetblue;
         color: #FFFFFF;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 700;
-        padding: 5px;
+        padding: 10px;
         border-radius: 3px;
         border: 1px solid grey;
+        text-transform: uppercase;
     }
 
     .addBtn {
+        width: 130px;
         color: rgb(94, 154, 156);
         font-weight: 700;
         margin-top: 10px;
@@ -84,4 +108,13 @@ export default {
         padding: 10px;
         width: 250px;
     }
+
+    .select {
+        display: block;
+        color: rgb(128, 125, 125);
+        margin-top: 10px;
+        padding: 10px 8px;
+        width: 275px;
+    }
+     
 </style>
