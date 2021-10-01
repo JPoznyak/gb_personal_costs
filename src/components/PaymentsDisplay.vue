@@ -10,8 +10,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(item, idx) in list" :key="idx">
-                <td>{{ idx + 1 }}</td>
+            <tr v-for="(item, idx) in items" :key="idx">
+                <td>{{ item.id }}</td>
                 <td>{{ item.date }}</td>
                 <td>{{ item.category }}</td>
                 <td>{{ item.amount }}</td>
@@ -25,9 +25,13 @@
 export default {
     name: "PaymentsDisplay",
     props: {
-        list: {
+        items: {
             type: Array,
             default: ()=>[]
+        },
+        showItems: {
+            type: Boolean,
+            default: false
         }
     }
 }

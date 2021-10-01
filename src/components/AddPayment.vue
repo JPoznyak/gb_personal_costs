@@ -8,7 +8,7 @@
       <input class="form" v-model.number="amount" type="number" placeholder="Payment Amount" />
       <!-- <input class="form" v-model.trim="category" placeholder="Payment category" /> -->
       <select class="select" v-model="category" v-if="options">
-        <option value disabled selected hidden>Select Category</option>
+        <option value="" disabled selected hidden>Select Category</option>
         <option v-for="option in options" :value="option" :key="option">{{ option }}</option>
       </select>
       <add-category class="addBtn"/>
@@ -49,6 +49,7 @@ export default {
       };
       //Вызов события, название события и аргументы
       this.$emit("addNewPayment", data);
+    //  this.$store.commit('addDataToPaymentList', data)
     }
   },
 
@@ -73,9 +74,18 @@ export default {
     }
   },
 
-  created() {
-    this.fetchCategoryList()
-  }
+//   created() {
+//     this.fetchCategoryList()
+//   }
+async created(){
+    await this.fetchCategoryList()
+    if(this.$route.name === 'AddPaymentFromUrl') {
+      this.amount = Number(this.$route.query?.amount)|| 0,
+      this.category = this.$route?.params?.category || ''
+      //this.$router.push('/dashboard')
+    }
+    },
+
 };
 </script>
 

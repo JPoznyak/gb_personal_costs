@@ -38,12 +38,12 @@ export default new Vuex.Store({
             return new Promise((resolve)=>{
                 setTimeout(()=>{
                     const items = []
-                    for(let i = 0; i < 25; i++){
+                    for(let i = 1; i < 25; i++){
                         items.push({
                             date: "27.09.2021",
                             category: "Health",
                             amount: i + 1000,
-                            id: i + 1
+                            id: i
                         })
                     }
                     resolve(items)
