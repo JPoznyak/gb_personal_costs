@@ -11,11 +11,6 @@ Vue.use(Router)
 const router =  new Router({
     mode: 'history',
     routes: [
-        // {
-        //     path: '/',
-        //     component: ()=>import('../pages/Login'),
-        //     name: 'Login'
-        // },
         {
             path: '/dashboard',
             component: ()=>import('../pages/Dashboard'),
@@ -46,11 +41,7 @@ const router =  new Router({
             component: ()=>import('../components/AddPayment'),
             name: 'AddPaymentFromUrl'
         },
-        // {
-        //     path: '/auth',
-        //     component: ()=>import('../pages/Login'),
-        //     name: 'Login'
-        // },
+    
         {
             path: "*",
             component: ()=>import('../pages/NotFound')
