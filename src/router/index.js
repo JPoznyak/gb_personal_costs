@@ -12,6 +12,11 @@ const router =  new Router({
     mode: 'history',
     routes: [
         {
+            path: '/',
+            component: ()=>import(/* webpackChunkName:"Login" */'../pages/Login'),
+            name: 'Login'
+        },
+        {
             path: '/dashboard',
             component: ()=>import('../pages/Dashboard'),
             name: 'Dashboard'
