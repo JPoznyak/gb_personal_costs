@@ -1,37 +1,34 @@
 <template>
   <div id="app">
-     <div :class="[$style.wrapper]">
-     
-    <div :class="[$style.menu]">
-      <router-link to='/dashboard'>Dashboard</router-link> /
-      <router-link to='/about'>About</router-link> / 
-      <!-- <router-link to='/notfound'>NotFound</router-link> /  -->
-      <button @click="goToPageNotFound">NotFound</button> /
-      <!-- <a href="dashboard">Dashboard</a> /
-      <a href="about">About</a> / 
-      <a href="notfound">About</a> /  -->
-      <!-- <router-link to='/add/payment/Food?value=200'>New Payment</router-link> / -->
-      <button @click="showCompletedPaymentForm">New Payment</button>
-    </div>
-  <main>
-  <div :class="[$style.content]">
-      <!-- <About v-if="page === 'about'"/>
-      <Dashboard v-if="page === 'dashboard'"/> -->
-      <!-- <NotFound v-if="page === 'notfound'"/>  -->
-    <router-view />
-   </div>    
-  </main>
+    <div :class="[$style.wrapper]">
+      <div :class="[$style.menu]">
+        <router-link to='/dashboard'>Dashboard</router-link> /
+        <router-link to='/about'>About</router-link> / 
+        <router-link to='/notfound'>NotFound</router-link> / 
+        <button @click="showCompletedPaymentForm">New Payment</button>
+      </div>
+    <main>
+      <div :class="[$style.content]">
+        <router-view />
+      </div>    
+    </main>
+    <transition name="fade">
+			<modal-window-add-payment v-bind="modalSettings" v-if="modalSettings.modalShown"/>
+		</transition>
   </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "App",
-  
+  components: {
+    ModalWindowAddPayment: () => import('./components/ModalWindowAddPayment.vue')
+  },
   data: () => ({
-   
+    modalSettings: {
+      modalShown: false
+    }
   }),
 
   methods: {
@@ -41,10 +38,26 @@ export default {
     goToPageNotFound() {
       this.$router.push({name: "NotFound"})
     },
+    onShow(settings){
+      this.modalSettings = settings
+      this.modalShown = true
+    },
+    onHide(){
+      this.modalShown = false
+      this.modalSettings = {}
+    }
+  },
+
+  mounted () {
+    this.$modal.EventBus.$on('onShown', this.onShown)
+    this.$modal.EventBus.$on('onHide', this.onHide)
+  },
+  beforeDestroy(){
+    this.$modal.EventBus.$off('show', this.onShow)
+    this.$modal.EventBus.$off('hide', this.onHide)
   },
 
   created () {
-    this.page = Number(this.$route.params.page)
     this.$store.dispatch("fetchData")
     this.$store.dispatch("fetchCategoryList")
   }

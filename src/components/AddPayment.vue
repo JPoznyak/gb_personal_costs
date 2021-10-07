@@ -8,23 +8,22 @@
       <input class="form" v-model.number="amount" type="number" placeholder="Payment Amount" />
       <!-- <input class="form" v-model.trim="category" placeholder="Payment category" /> -->
       <select class="select" v-model="category" v-if="options">
-        <option value="" disabled selected hidden>Select Category</option>
+        <option value disabled selected hidden>Select Category</option>
         <option v-for="option in options" :value="option" :key="option">{{ option }}</option>
       </select>
-      <add-category class="addBtn"/>
+      <add-category class="addBtn" />
       <button class="addBtn" @click="onClick" :disabled="!category">Add Data</button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex"
-import addCategory from "./AddCategory.vue"
+import { mapActions } from "vuex";
 
 export default {
   name: "AddPayment",
   components: {
-    addCategory
+    AddCategory: () => import('./AddCategory.vue')
   },
   data() {
     return {
@@ -36,9 +35,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-        'fetchCategoryList'
-    ]),
+    ...mapActions(["fetchCategoryList"]),
 
     onClick() {
       const { category, amount } = this;
@@ -49,11 +46,14 @@ export default {
       };
       //Вызов события, название события и аргументы
       this.$emit("addNewPayment", data);
-    //  this.$store.commit('addDataToPaymentList', data)
+      //  this.$store.commit('addDataToPaymentList', data)
     }
   },
 
   computed: {
+    categoryList() {
+      return this.$store.getters.getCategoriesList;
+    },
     // getCurrentDate() {
     //     const today = new Date()
     //     const d = today.getDate()
@@ -74,57 +74,55 @@ export default {
     }
   },
 
-//   created() {
-//     this.fetchCategoryList()
-//   }
-async created(){
-    await this.fetchCategoryList()
-    if(this.$route.name === 'AddPaymentFromUrl') {
-      this.amount = Number(this.$route.query?.amount)|| 0,
-      this.category = this.$route?.params?.category || ''
+  //   created() {
+  //     this.fetchCategoryList()
+  //   }
+  async created() {
+    await this.fetchCategoryList();
+    if (this.$route.name === "AddPaymentFromUrl") {
+      (this.amount = Number(this.$route.query?.amount) || 0),
+        (this.category = this.$route?.params?.category || "");
       //this.$router.push('/dashboard')
     }
-    },
-
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-    .newPayment {
-        width: 130px;
-        // margin-bottom: 10px;
-        // margin-top: 10px;
-        background-color: cadetblue;
-        color: #FFFFFF;
-        font-size: 12px;
-        font-weight: 700;
-        padding: 10px;
-        border-radius: 3px;
-        border: 1px solid grey;
-        text-transform: uppercase;
-    }
+.newPayment {
+  width: 130px;
+  // margin-bottom: 10px;
+  // margin-top: 10px;
+  background-color: cadetblue;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid grey;
+  text-transform: uppercase;
+}
 
-    .addBtn {
-        width: 130px;
-        color: rgb(94, 154, 156);
-        font-weight: 700;
-        margin-top: 10px;
-        padding: 10px;
-    }
+.addBtn {
+  width: 130px;
+  color: rgb(94, 154, 156);
+  font-weight: 700;
+  margin-top: 10px;
+  padding: 10px;
+}
 
-    .form {
-        display: block;
-        margin-top: 10px;
-        padding: 10px;
-        width: 250px;
-    }
+.form {
+  display: block;
+  margin-top: 10px;
+  padding: 10px;
+  width: 250px;
+}
 
-    .select {
-        display: block;
-        color: rgb(128, 125, 125);
-        margin-top: 10px;
-        padding: 10px 8px;
-        width: 275px;
-    }
-     
+.select {
+  display: block;
+  color: rgb(128, 125, 125);
+  margin-top: 10px;
+  padding: 10px 8px;
+  width: 275px;
+}
 </style>

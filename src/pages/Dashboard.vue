@@ -4,9 +4,9 @@
         <h1>Take a look on your payments and add more!</h1>
       </header> 
     <main>
-        <div :class="[$style.content]">
+        <!-- <div :class="[$style.content]">
             <add-payment @addNewPayment="addData" />
-        </div>
+        </div> -->
         <div :class="[$style.content]">
             <payments-display show-items :items="currentElements" />
             <div :class="[$style.total]">
@@ -20,30 +20,33 @@
                         @paginate="changePage"
             />
         </div> 
+
+        <div :class="[$style.content]">
+            <modal-window-add-payment @close="onModalClose" v-if="modalIsShow"/>
+            <button @click="modalIsShow = true">Add Payment</button>
+        </div>
     </main>  
     </div>
 </template>
 
 <script>
-import PaymentsDisplay from "../components/PaymentsDisplay.vue";
-import Pagination from "../components/Pagination.vue";
-import AddPayment from "../components/AddPayment.vue";
-// import addCategory from "./components/AddCategory.vue";
-import { mapMutations, mapGetters, mapActions } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from "vuex";
 
 export default {
     name: "Dashboard",
     components: {
-        PaymentsDisplay,
-        AddPayment,
+        // AddPayment: () => import('../AddPayment.vue'),
+        PaymentsDisplay: () => import('../components/PaymentsDisplay.vue'),
         // addCategory,
-        Pagination
+        Pagination: () => import('../components/Pagination.vue'),
+        ModalWindowAddPayment: () => import("../components/ModalWindowAddPayment.vue")
     },
     data: () => ({
-    page: '',
-    curPage: 1,
-    n: 5,
-  }),
+        modalIsShow: false,
+        page: '',
+        curPage: 1,
+        n: 5,
+    }),
 
   methods: {
     ...mapMutations({
@@ -66,6 +69,10 @@ export default {
     addCategory(){
       this.$store.commit('addCategoryToList', this.category)
     },
+    onModalClose(){
+        this.modalIsShow = false
+
+    }
   },
   computed: {
     ...mapGetters({
