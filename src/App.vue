@@ -3,16 +3,17 @@
      <div :class="[$style.wrapper]">
      
     <div :class="[$style.menu]">
-      <router-link to='/dashboard'>Dashboard</router-link> /
-      <router-link to='/about'>About</router-link> / 
+      <router-link to='/dashboard'>Dashboard /</router-link>  /
+      <router-link to='/about'>About /</router-link>  / 
       <!-- <router-link to='/notfound'>NotFound</router-link> /  -->
-      <button @click="goToPageNotFound">NotFound</button> /
+      <button @click="goToPageNotFound">NotFound</button> 
       <!-- <a href="dashboard">Dashboard</a> /
       <a href="about">About</a> / 
       <a href="notfound">About</a> /  -->
       <!-- <router-link to='/add/payment/Food?value=200'>New Payment</router-link> / -->
-      <button @click="showCompletedPaymentForm">New Payment</button>
+      <!-- <button @click="showCompletedPaymentForm">New Payment</button> -->
     </div>
+  
   <main>
   <div :class="[$style.content]">
       <!-- <About v-if="page === 'about'"/>
@@ -35,9 +36,9 @@ export default {
   }),
 
   methods: {
-    showCompletedPaymentForm(){
-      this.$router.push({name: "AddPaymentFromUrl"})
-    },
+    // showCompletedPaymentForm(){
+    //   this.$router.push({name: "AddPaymentFromUrl"})
+    // },
     goToPageNotFound() {
       this.$router.push({name: "NotFound"})
     },
@@ -57,6 +58,11 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   display: block;
   height: 100%
+}
+.menu{
+    & > a {
+    padding-right: 10px;
+  }
 }
 .content {
   padding-top: 20px;

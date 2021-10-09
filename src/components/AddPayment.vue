@@ -17,6 +17,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapActions } from "vuex"
 import addCategory from "./AddCategory.vue"
@@ -25,6 +26,9 @@ export default {
   name: "AddPayment",
   components: {
     addCategory
+  },
+  props: {
+    data: Object
   },
   data() {
     return {
@@ -41,15 +45,14 @@ export default {
     ]),
 
     onClick() {
-      const { category, amount } = this;
       const data = {
+        amount: Number(this.amount),
         date: this.date || this.getCurrentDate,
-        category,
-        amount
+        category: this.category,
       };
       //Вызов события, название события и аргументы
-      this.$emit("addNewPayment", data);
-    //  this.$store.commit('addDataToPaymentList', data)
+    //   this.$emit("addNewPayment", data);
+     this.$store.commit('addDataToPaymentList', data)
     }
   },
 
@@ -74,17 +77,15 @@ export default {
     }
   },
 
-//   created() {
-//     this.fetchCategoryList()
-//   }
+
 async created(){
     await this.fetchCategoryList()
     if(this.$route.name === 'AddPaymentFromUrl') {
       this.amount = Number(this.$route.query?.amount)|| 0,
       this.category = this.$route?.params?.category || ''
-      //this.$router.push('/dashboard')
+    //   this.$router.push('/dashboard')
     }
-    },
+},
 
 };
 </script>

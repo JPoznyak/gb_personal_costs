@@ -13,7 +13,7 @@ const router =  new Router({
     routes: [
         {
             path: '/',
-            component: ()=>import(/* webpackChunkName:"Login" */'../pages/Login'),
+            component: ()=>import('../pages/Login'),
             name: 'Login'
         },
         {
@@ -37,15 +37,15 @@ const router =  new Router({
             name: 'NotFound'
         },
         {
-            path: '/add/payment/Food?amount=200',
-            component: ()=>import('../components/AddPayment'),
-            name: 'AddPaymentFromUrl'
-        },
-        {
-            path: '/add/payment/:category/',
-            component: ()=>import('../components/AddPayment'),
-            name: 'AddPaymentFromUrl'
-        },
+            path: "/dashboard/:action/:section/:category",
+            component: () => import('../pages/Dashboard.vue'),
+            name: "AddPaymentFromUrl"
+          },
+        // {
+        //     path: '/add/payment/:category/',
+        //     component: ()=>import('../components/AddPayment'),
+        //     name: 'AddPaymentFromUrl'
+        // },
     
         {
             path: "*",
