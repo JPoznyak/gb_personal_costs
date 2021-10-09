@@ -23,7 +23,7 @@ import { mapActions } from "vuex";
 export default {
   name: "AddPayment",
   components: {
-    AddCategory: () => import('./AddCategory.vue')
+    AddCategory: () => import("./AddCategory.vue")
   },
   data() {
     return {
@@ -34,21 +34,35 @@ export default {
     };
   },
 
-  methods: {
-    ...mapActions(["fetchCategoryList"]),
+    methods: {
+      ...mapActions(["fetchCategoryList"]),
 
-    onClick() {
-      const { category, amount } = this;
-      const data = {
-        date: this.date || this.getCurrentDate,
-        category,
-        amount
-      };
-      //Вызов события, название события и аргументы
-      this.$emit("addNewPayment", data);
-      //  this.$store.commit('addDataToPaymentList', data)
-    }
-  },
+      onClick() {
+        const { category, amount } = this;
+        const data = {
+          date: this.date || this.getCurrentDate,
+          category,
+          amount
+        };
+        //Вызов события, название события и аргументы
+        this.$emit("addNewPayment", data);
+        //  this.$store.commit('addDataToPaymentList', data)
+      }
+    },
+
+//   methods: {
+//     onClick() {
+//       const data = {
+//         amount: Number(this.amount),
+//         category: this.category,
+//         date: this.date || this.getCurrentDate
+//       };
+//       this.addData(data);
+//     },
+//     addData(data) {
+//       this.$store.commit("addDataToPaymentsList", data);
+//     }
+//   },
 
   computed: {
     categoryList() {
@@ -72,19 +86,19 @@ export default {
     options() {
       return this.$store.getters.getCategoriesList;
     }
-  },
+  }
 
   //   created() {
   //     this.fetchCategoryList()
   //   }
-  async created() {
-    await this.fetchCategoryList();
-    if (this.$route.name === "AddPaymentFromUrl") {
-      (this.amount = Number(this.$route.query?.amount) || 0),
-        (this.category = this.$route?.params?.category || "");
-      //this.$router.push('/dashboard')
-    }
-  }
+  //   async created() {
+  //     await this.fetchCategoryList();
+  //     if (this.$route.name === "AddPaymentFromUrl") {
+  //       (this.amount = Number(this.$route.query?.amount) || 0),
+  //         (this.category = this.$route?.params?.category || "");
+  //       //this.$router.push('/dashboard')
+  //     }
+  //   }
 };
 </script>
 
