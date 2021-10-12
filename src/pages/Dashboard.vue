@@ -1,193 +1,60 @@
-<!-- // <template>
-//     <div :class="[$style.wrapper]">
-//       <header>
-//         <h1>Take a look on your payments and add more!</h1>
-//       </header> 
-//     <main>
-//         <div :class="[$style.content]">
-//             <add-payment @addNewPayment="addData" />
-//         </div>
-//         <div :class="[$style.content]">
-//             <payments-display show-items :items="currentElements" />
-//             <div :class="[$style.total]">
-//                 Total: {{TotalAmount}}
-//             </div>
-//         </div>
-//         <div :class="[$style.content]">
-//             <pagination :cur="curPage" 
-//                         :n="n" 
-//                         :length="paymentsList.length" 
-//                         @paginate="changePage"
-//             />
-//         </div> 
-
-//         <div :class="[$style.content]">
-//             <modal-window-add-payment @close="onModalClose" v-if="modalIsShow"/>
-//             <button @click="modalIsShow = true">Add Payment</button>
-//         </div>
-//         <button @click="addPayment">Add Payment</button>
-//     </main>  
-//     </div>
-// </template>
-
-// <script>
-// import { mapMutations, mapGetters } from "vuex";
-
-// export default {
-//     name: "Dashboard",
-//     components: {
-//         AddPayment: () => import('../AddPayment.vue'),
-//         PaymentsDisplay: () => import('../components/PaymentsDisplay.vue'),
-//         // addCategory,
-//         Pagination: () => import('../components/Pagination.vue'),
-//         ModalWindowAddPayment: () => import("../components/ModalWindowAddPayment.vue")
-//     },
-//     data: () => ({
-//         modalIsShow: false,
-//         page: '',
-//         curPage: 1,
-//         n: 5,
-//     }),
-
-// //   methods: {
-// //     ...mapMutations({
-// //       addDataToStore: 'addDataToPaymentList'
-// //     }),
-// //      ...mapActions({
-// //       fetchListData: 'fetchData'
-     
-// //     }),
-// //     addData(newPayment){
-// //       // this.paymentsList.push(data)
-// //       // this.paymentsList = [...this.paymentsList, data]
-// //       this.addDataToStore(newPayment)
-// //       console.log(newPayment)
-// //     }, 
-// //     changePage (p) {
-// //       this.page = p
-// //       this.$store.dispatch('fetchData', p)
-// //     },
-// //     // changePage(p){
-// //     //   this.curPage = p
-// //     // },
-// //     addCategory(){
-// //       this.$store.commit('addCategoryToList', this.category)
-// //     },
-// //     onModalClose(){
-// //         this.modalIsShow = false
-// //     }
-// //   },
-
-// methods: {
-//     ...mapMutations({
-//       addData: 'setPaymentsListData'
-//     }),
-//     changePage (p) {
-//       this.page = p
-//       this.$store.dispatch('fetchData', p)
-//     },
-//     addPayment () {
-//       this.$modal.show({ title: 'Add Payment Form', content: 'AddPayment' })
-//     }
-//   },
-
-//   computed: {
-//     ...mapGetters({
-//       paymentsList:'getPaymentsList',
-//       categories: 'getCategoriesList'
-//     }),
-//     currentElements(){
-//       const { n, curPage } = this
-//       return this.paymentsList.slice(n * (curPage - 1), n * (curPage - 1) + n)
-//     },
-//     TotalAmount(){
-//       return this.$store.getters.getPaymentsListTotalAmount
-//     },
-//     paymentsList(){
-//        return this.$store.getters.getPaymentsList
-//     }
-//   },
-
-//   created () {
-//     if (this.$route.params?.page) {
-//       this.page = Number(this.$route.params.page)
-//     }
-//     this.$store.dispatch('fetchData', 1)
-//     this.$store.dispatch('fetchCategoryList')
-//   },
-
-// //   actions: {
-// //     ...mapActions([
-// //       'fetchCategoryList'
-// //     ])
-// //   }, 
-
-// //   mounted() {
-// //     if (!this.categories.length) {
-// //       this.addCategory()
-// //     }
-// //   }, 
-  
-// }
-// </script>
-
-// <style lang="scss" module>
-// .wrapper {
-//   font-family: Avenir, Helvetica, Arial, sans-serif;
-//   display: block;
-//   height: 100%
-// }
-// .content {
-//   padding-bottom: 20px;
-// }
-// .total {
-//   padding-top: 20px;
-//   color: red;
-//   font-weight: 700;
-// }
-// </style> -->
-
 <template>
-  <div>
-    Total Price : {{ getFPV }}
-    <PaymentDisplay show-items :items="currentElements" />
-    <router-link to="/dashboard/add/payment/Sport?value=400">
-      Sport400</router-link
-    >
-    /
+ <div :class="[$style.wrapper]">
+    <header>
+        <h1>Take a look on your payments and add more!</h1>
+    </header> 
+    <main>
+        <div :class="[$style.content]">
+            <add-payment @addNewPayment="addData" />
+        </div>
+        <div :class="[$style.content]">
+            <PaymentsDisplay show-items :items="currentElements" />
+            <div :class="[$style.total]">
+                Total: {{ getTotalAmount }}
+            </div>
+        </div>
+        <div :class="[$style.content]">
+            <pagination
+                :cur="page"
+                :n="n"
+                :length="paymentsList.length"
+                @paginate="changePage"
+                />
+        </div> 
 
-    <router-link to="/dashboard/add/payment/Education?value=500">
-      Education500</router-link
-    >
-    /
+         <div :class="[$style.content]">
+            <router-link to="/dashboard//add/payment/Food?value=200">
+            Food-200</router-link>
+            <router-link to="/dashboard/add/payment/Transport?value=50">
+            Transport-50</router-link>
+            <router-link to="/dashboard/add/payment/Entertainment?value=2000">
+            Entertainment-2000</router-link>
+         </div>
 
-    <router-link to="/dashboard/add/payment/Transport?value=600">
-      Transport600</router-link
-    >
+         <div :class="[$style.content]">
+             <modal-window-add-payment @close="onModalClose" v-if="modalIsShown"/>
+             <button @click="modalIsShown = true">Add Payment</button>
+         </div>
 
-    <pagination
-      :cur="page"
-      :n="n"
-      :length="paymentsList.length"
-      @paginate="changePage"
-    />
-    <button @click="addPayment">add</button>
+    </main>
   </div>
 </template>
 
 <script>
 import Pagination from "../components/Pagination.vue"
-import PaymentDisplay from "../components/PaymentDisplay.vue"
+import AddPayment from "../components/AddPayment.vue"
+import PaymentsDisplay from "../components/PaymentsDisplay.vue"
 import { mapMutations, mapGetters } from "vuex"
 export default {
-  components: { PaymentDisplay, Pagination },
+  components: { PaymentsDisplay, Pagination, AddPayment },
   name: "Dashboard",
   data: () => ({
     page: 1,
-    n: 10
+    n: 10,
+    modalIsShown: false,
   }),
   watch: {
-    $route (to, from) {
+    $route (to) {
       if (to.name === "AddPaymentFromUrl") {
         this.checkUrl()
       }
@@ -195,8 +62,8 @@ export default {
   },
   computed: {
     ...mapGetters(["getPaymentsList"]),
-    getFPV () {
-      return this.$store.getters.getPaymentsListFullPrice
+    getTotalAmount () {
+      return this.$store.getters.getPaymentsListTotalAmount
     },
     paymentsList () {
       return this.$store.getters.getPaymentsList
@@ -214,19 +81,22 @@ export default {
       this.page = p
       this.$store.dispatch("fetchData", p)
     },
-    addPayment () {
-      this.$modal.show({ title: "Add Payment Form", content: "AddPaymentForm" })
+    // addPayment () {
+    //   this.$modal.show({ title: "Add Payment", content: "AddPayment" })
+    // },
+    onModalClose(){
+        this.modalIsShown = false
     },
     checkUrl () {
       const { action, category, section } = this.$route.params
       this.$modal.show({
-        title: "Add Payment Form",
-        content: "AddPaymentForm",
+        title: "Add Payment",
+        content: "AddPayment",
         data: {
           action: action || "",
           category: category || "",
           section: section || "",
-          amount: this.$route.query?.value || ""
+          amount: this.$route.query?.amount || ""
         }
       })
     }
@@ -243,4 +113,17 @@ export default {
   }
 }
 </script>
-<style></style>
+
+<style lang="scss" module>
+.content {
+  padding-bottom: 20px;
+  & > a {
+      padding-right: 10px;
+  }
+}
+.total {
+  padding-top: 20px;
+  color: red;
+  font-weight: 700;
+}
+</style>

@@ -42,11 +42,10 @@ const router =  new Router({
             name: 'AddPaymentFromUrl'
         },
         {
-            path: '/add/payment/:category/',
-            component: ()=>import('../components/AddPayment'),
-            name: 'AddPaymentFromUrl'
-        },
-    
+            path: "/dashboard/:action/:section/:category",
+            component: () => import('../pages/Dashboard.vue'),
+            name: "AddPaymentFromUrl"
+          },
         {
             path: "*",
             component: ()=>import('../pages/NotFound')
@@ -56,7 +55,7 @@ const router =  new Router({
 
 const isAuth = true
 
-router.beforeEach((to,from, next)=>{
+router.beforeEach((to, from, next)=>{
     if(to.name !== 'login' && !isAuth) {
         next({name: 'login'})
     }else {
@@ -72,7 +71,8 @@ const titles = routeName => {
     }[routeName]
 }
 
-router.afterEach((to)=>{
+router.afterEach((to, from)=>{
+    console.log(to, from)
     document.title = titles(to.name)
 })
 

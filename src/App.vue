@@ -1,165 +1,79 @@
-<!-- <template>
-//   <div id="app">
-//     <div class="menu">
-//       <router-link to='/dashboard'>Dashboard</router-link> /
-//       <router-link to='/about'>About</router-link> / 
-//       <router-link to='/notfound'>NotFound</router-link> / 
-//       <!-- <button @click="showCompletedPaymentForm">New Payment</button> -->
-<!--    </div>
-    <main>
-      <div class="content">
-        <router-view />
-      </div>    
-    </main>
-    <transition name="fade">
-			<modal-window-add-payment v-bind="modalSettings" v-if="modalSettings.modalIsShown"/>
-		</transition>
-  </div>
-</template>
-
-// <script> 
-// export default {
-//   name: "App",
-//   components: {
-//     ModalWindowAddPayment: () => import('./components/ModalWindowAddPayment.vue')
-//   },
-//   data: () => ({
-//     modalSettings: {
-//       modalIsShown: false
-//     }
-//   }),
-
-//   methods: {
-//     showCompletedPaymentForm(){
-//       this.$router.push({name: "AddPaymentFromUrl"})
-//     },
-//     // goToPageNotFound() {
-//     //   this.$router.push({name: "NotFound"})
-//     // },
-
-//     onShown (settings) {
-//       this.modalSettings = settings
-//       this.modalSettings.modalIsShow = true
-//     },
-//     onHide () {
-//       this.modalSettings = {}
-//       this.modalSettings.modalIsShow = false
-//     }
-//   },
-
-//   mounted () {
-//     this.$modal.EventBus.$on('onShown', this.onShown)
-//     this.$modal.EventBus.$on('onHide', this.onHide)
-//   },
-  
-//   beforeDestroy(){
-//     this.$modal.EventBus.$off('show', this.onShow)
-//     this.$modal.EventBus.$off('hide', this.onHide)
-//   },
-
-//   created () {
-//     this.$store.dispatch("fetchData")
-//     this.$store.dispatch("fetchCategoryList")
-//   }
-
-// }
-// </script>
-
-// <style lang="scss">
-
-// #app {
-//   font-family: Avenir, Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   text-align: center;
-//   color: #2c3e50;
-//   margin-top: 60px;
-// }
-// .menu {
-//   color: red;
-//   padding-bottom: 10px;
-
-//   & a {
-//     padding-left: 10px;
-//   }
-// }
-// a
-// .content {
-//   padding-top: 20px;
-// }
-// .fade-enter-active,
-// .fade-leave-active {
-//   transition: opacity .5s ease;
-// }
-// .fade-enter,
-// .fade-leave-to {
-//   opacity: 0;
-// }
-
-// </style> -->
-
-
 <template>
   <div id="app">
-    <header class="header">
-      <router-link to="/dashboard">dashboard</router-link>
-      <router-link to="/about">about</router-link>
-			<router-link to="/404">notfound</router-link>
-    </header>
-    <main>
-      <router-view />
-    </main>
-		<transition name="fade">
-			<modal-window-add-payment v-bind="modalSettings" v-if="modalSettings.modalIsShow"/>
-		</transition>
-    <transition name="fade">
-      <context-menu />
-    </transition>
+    <div :class="[$style.wrapper]">
+      <div :class="[$style.menu]">
+        <router-link to="/dashboard">Dashboard</router-link>/
+        <router-link to="/about">About</router-link>/
+        <button @click="goToPageNotFound">NotFound</button>
+      </div>
+      <main>
+        <div :class="[$style.content]">
+          <!-- <About v-if="page === 'about'"/>
+          <Dashboard v-if="page === 'dashboard'"/>-->
+          <!-- <NotFound v-if="page === 'notfound'"/>  -->
+          <router-view />
+        </div>
+      </main>
+      <transition name="fade">
+        <modal-window-add-payment v-bind="modalSettings" v-if="modalSettings.modalIsShown" />
+      </transition>
+      <transition name="fade">
+        <context-menu />
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import ContextMenu from './components/ContextMenu.vue'
 export default {
   name: "App",
   components: {
-    ContextMenu,
-    ModalWindowAddPayment: () => import('./components/ModalWindowAddPayment.vue')
+    ContextMenu: () => import("./components/ContextMenu.vue"),
+    ModalWindowAddPayment: () =>
+      import("./components/ModalWindowAddPayment.vue")
   },
   data: () => ({
     modalSettings: {
-      modalIsShow: false
+      modalIsShown: false
     }
   }),
   methods: {
-    goToPage (pageName) {
-      this.$router.push({
-        name: pageName
-      })
+    // goToPage (pageName) {
+    //   this.$router.push({
+    //     name: pageName
+    //   })
+    // },
+    goToPageNotFound() {
+      this.$router.push({ name: "NotFound" });
     },
-    onShown (settings) {
-      this.modalSettings = settings
-      this.modalSettings.modalIsShow = true
+
+    onShow(settings) {
+      this.modalSettings = settings;
+      this.modalSettings.modalIsShown = true;
     },
-    onHide () {
-      this.modalSettings = {}
-      this.modalSettings.modalIsShow = false
+    onHide() {
+      this.modalSettings = {};
+      this.modalSettings.modalIsShown = false;
     }
   },
-  mounted () {
-    this.$modal.EventBus.$on('onShown', this.onShown)
-    this.$modal.EventBus.$on('onHide', this.onHide)
+  mounted() {
+    this.$modal.EventBus.$on("show", this.onShow);
+    this.$modal.EventBus.$on("hide", this.onHide);
   },
-  created () {
-    console.log(this.$modal)
-    this.$store.dispatch("fetchData")
-    this.$store.dispatch("fetchCategoryList")
-  }
-}
+  beforeDestroy() {
+    this.$modal.EventBus.$off("show", this.onShow);
+    this.$modal.EventBus.$off("hide", this.onHide);
+  },
+  // created() {
+  //   console.log(this.$modal);
+  //   this.$store.dispatch("fetchData");
+  //   this.$store.dispatch("fetchCategoryList");
+  // }
+};
 </script>
 
-<style lang="scss">
-#app {
+<style lang="scss" module>
+.wrapper {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -167,16 +81,20 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.header {
-  color: red;
+.menu {
   & a {
-    padding-left: 5px;
+    padding-left: 10px;
   }
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .10s;
+.content {
+  padding-top: 20px;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s;
+}
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

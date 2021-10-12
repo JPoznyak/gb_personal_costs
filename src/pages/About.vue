@@ -1,6 +1,7 @@
 <template>
-    <div>Anything about our awesome applications</div>
+    <div>Anything about our awesome applications
     <button @click="openModalAuth">OpenAuth</button>
+    </div>
 </template>
 
 <script>

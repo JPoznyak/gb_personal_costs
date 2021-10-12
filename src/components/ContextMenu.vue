@@ -1,81 +1,69 @@
 <template>
-  <div id="app">
-    <header class="header">
-      <router-link to="/dashboard">dashboard</router-link>
-      <router-link to="/about">about</router-link>
-			<router-link to="/404">notfound</router-link>
-    </header>
-    <main>
-      <router-view />
-    </main>
-		<transition name="fade">
-			<modal-window-add-payment v-bind="modalSettings" v-if="modalSettings.modalIsShow"/>
-		</transition>
-    <transition name="fade">
-      <context-menu />
-    </transition>
+  <div class="context" v-if="shown" :style="styles">
+    <div
+      class="context__item"
+      v-for="item in items"
+      :key="item.text"
+      @click="onCLick(item)"
+    >
+      {{ item.text }}
+    </div>
   </div>
 </template>
 
 <script>
-import ContextMenu from './components/ContextMenu.vue'
 export default {
-  name: "App",
-  components: {
-    ContextMenu,
-    ModalWindowAddPayment: () => import('./components/ModalWindowAddPayment.vue')
-  },
-  data: () => ({
-    modalSettings: {
-      modalIsShow: false
+  name: "ContextMenu",
+  data () {
+    return {
+      items: [],
+      shown: false,
+      xPos: 0,
+      yPos: 0
     }
-  }),
+  },
   methods: {
-    goToPage (pageName) {
-      this.$router.push({
-        name: pageName
-      })
+    onCLick (item) {
+      item.action()
     },
-    onShown (settings) {
-      this.modalSettings = settings
-      this.modalSettings.modalIsShow = true
+    onShown ({ items, caller }) {
+      this.items = items
+      this.shown = true
+      this.setPosition(caller)
     },
-    onHide () {
-      this.modalSettings = {}
-      this.modalSettings.modalIsShow = false
+    onClose () {
+      this.items = []
+      this.shown = false
+    },
+    setPosition (caller) {
+      const pos = caller.getBoundingClientRect()
+      this.xPos = pos.left
+      this.yPos = pos.top
+    }
+  },
+  computed: {
+    styles () {
+      return {
+        top: `${this.yPos + 10}px`,
+        left: `${this.xPos + 20}px`
+      }
     }
   },
   mounted () {
-    this.$modal.EventBus.$on('onShown', this.onShown)
-    this.$modal.EventBus.$on('onHide', this.onHide)
+    this.$context.EventBus.$on("shown", this.onShown)
+    this.$context.EventBus.$on("close", this.onClose)
   },
-  created () {
-    console.log(this.$modal)
-    this.$store.dispatch("fetchData")
-    this.$store.dispatch("fetchCategoryList")
+  beforeDestroy () {
+    this.$context.EventBus.$off("shown", this.onShown)
+    this.$context.EventBus.$off("close", this.onClose)
   }
 }
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-.header {
-  color: red;
-  & a {
-    padding-left: 5px;
-  }
-}
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .10s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+<style lang="scss" scoped>
+.context {
+  position: absolute;
+  background: #eee;
+  cursor: pointer;
 }
 </style>
