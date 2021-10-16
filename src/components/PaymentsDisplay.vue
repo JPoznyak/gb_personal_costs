@@ -1,30 +1,27 @@
 <template>
-    <div class="payments-list">
-      <table>
-         <thead>
-             <tr>
-                 <th>#</th>
-                 <th>Date</th>
-                 <th>Category</th>
-                 <th>Amount</th>
-             </tr>
-         </thead>
-         <tbody>
-             <tr v-for="(item, idx) in items" :key="idx">
-                 <td>{{ item.id }}</td>
-                 <td>{{ item.date }}</td>
-                 <td>{{ item.category }}</td>
-                 <td>{{ item.amount }}</td>
-                 <td @click="onClickContextItem($event,item)" class="contextevent">...</td>
-             </tr>
-         </tbody>
-       </table>
-   </div>
+<v-container>
+    <v-row>
+        <v-col :cols="1">#</v-col>
+        <v-col :cols="4">Date</v-col>
+        <v-col :cols="5">Category</v-col>
+        <v-col :cols="2">Amount</v-col>
+    </v-row>
+     <v-row v-for="item in items" :key="item">
+        <v-col :cols="1">{{ item.id }}</v-col>
+        <v-col :cols="4">{{ item.date }}</v-col>
+        <v-col :cols="5">{{ item.category }}</v-col>
+        <v-col :cols="2">{{ item.amount }}</v-col>
+    </v-row>
+</v-container>
 </template>
+
+
+// <td @click="onClickContextItem($event,item)" class="contextevent">...</td> -->
+             
 
 <script>
 export default {
-  name: "PaymentDisplay",
+  name: "PaymentsDisplay",
   props: {
     items: {
       type: Array,
