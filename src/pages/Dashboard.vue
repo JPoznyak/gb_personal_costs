@@ -1,51 +1,49 @@
 <template>
   <v-container>
     <v-row>
-      <div class="text-h5 text-sm-h3">Take a look on your payments and add more!</div>
-
       <v-col>
-            <v-btn color="rgb(94, 154, 156)" dark @click="dialog=!dialog">
-              Add New Cost
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-        
-        
-
-        <!-- <v-dialog v-model="dialog" width="500px">
+        <div class="text-h5 text-sm-h3">Take a look on your payments and add more!</div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-dialog v-model="dialog" width="500px">
           <template v-slot:activator="{ on }">
             <v-btn color="rgb(94, 154, 156)" dark v-on="on" @click="dialog=!dialog">
               Add New Cost
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
-        </v-dialog> -->
+          <v-card>
+            <add-payment />
+          </v-card>
+        </v-dialog>
         <PaymentsDisplay show-items :items="currentElements" />
-
-        <add-payment @addNewPayment="addData" />
-
-        <div :class="[$style.total]">Total: {{ getTotalAmount }}</div>
-
-        <v-pagination :cur="page" :n="n" :length="paymentsList.length" @paginate="changePage" />
-        <router-link to="/dashboard//add/payment/Food?value=200">Food-200</router-link>
-        <router-link to="/dashboard/add/payment/Transport?value=50">Transport-50</router-link>
-        <router-link to="/dashboard/add/payment/Entertainment?value=2000">Entertainment-2000</router-link>
-
-        <modal-window-add-payment @close="onModalClose" v-if="modalIsShown" />
-        <!-- <button @click="modalIsShown = true">Add Payment</button> -->
+        <template>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="currentElements.length"
+              prev-icon="mdi-menu-left"
+              next-icon="mdi-menu-right"
+            ></v-pagination>
+          </div>
+        </template>
       </v-col>
-
-      <v-col></v-col>
+      <v-col>Chart</v-col>
     </v-row>
+
+        
   </v-container>
 </template>
 
 <script>
 // import Pagination from "../components/Pagination.vue";
-// import AddPayment from "../components/AddPayment.vue";
+import AddPayment from "../components/AddPayment.vue";
 import PaymentsDisplay from "../components/PaymentsDisplay.vue";
 import { mapMutations, mapGetters } from "vuex";
 export default {
-  components: { PaymentsDisplay },
+  components: { PaymentsDisplay, AddPayment },
   name: "Dashboard",
   data: () => ({
     dialog: false,
@@ -81,35 +79,35 @@ export default {
       this.page = p;
       this.$store.dispatch("fetchData", p);
     },
-    // addPayment () {
-    //   this.$modal.show({ title: "Add Payment", content: "AddPayment" })
+    addPayment() {
+      this.$modal.show({ title: "Add Payment", content: "AddPayment" });
+    }
+    // onModalClose() {
+    //   this.modalIsShown = false;
     // },
-    onModalClose() {
-      this.modalIsShown = false;
-    },
-    checkUrl() {
-      const { action, category, section } = this.$route.params;
-      this.$modal.show({
-        title: "Add Payment",
-        content: "AddPayment",
-        data: {
-          action: action || "",
-          category: category || "",
-          section: section || "",
-          amount: this.$route.query?.amount || ""
-        }
-      });
-    }
+    // checkUrl() {
+    //   const { action, category, section } = this.$route.params;
+    //   this.$modal.show({
+    //     title: "Add Payment",
+    //     content: "AddPayment",
+    //     data: {
+    //       action: action || "",
+    //       category: category || "",
+    //       section: section || "",
+    //       amount: this.$route.query?.amount || ""
+    //     }
+    //   });
+    // }
   },
-  async created() {
-    if (this.$route.params.page) {
-      this.page = Number(this.$route.params.page);
-    }
-    await this.$store.dispatch("fetchData");
-    await this.$store.dispatch("fetchCategoryList");
-    if (this.$route.name === "AddPaymentFromUrl") {
-      this.checkUrl();
-    }
+  created() {
+    // if (this.$route.params.page) {
+    //   this.page = Number(this.$route.params.page);
+    // }
+    this.$store.dispatch("fetchData", 1);
+    this.$store.dispatch("fetchCategoryList");
+    // if (this.$route.name === "AddPaymentFromUrl") {
+    //   this.checkUrl();
+    // }
   }
 };
 </script>
